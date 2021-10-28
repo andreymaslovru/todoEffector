@@ -1,4 +1,10 @@
-import { createEvent, createStore, createEffect } from "effector";
+import {
+  createEvent,
+  createStore,
+  createEffect,
+  combine,
+  restore,
+} from "effector";
 
 // Standard interface and functions
 export interface Todo {
@@ -87,3 +93,10 @@ export default createStore<Store>({
     newTodo: "",
     todos: removeTodo(state.todos, id),
   }));
+
+export const $fetchError = restore<Error>(getTodosFx.failData, null);
+
+export const $todosGetStatus = combine({
+  loading: getTodosFx.pending,
+  error: $fetchError,
+});
