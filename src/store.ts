@@ -1,4 +1,4 @@
-import { createEvent, createStore } from "effector";
+import { createEvent, createStore, createEffect } from "effector";
 
 // Standard interface and functions
 export interface Todo {
@@ -38,7 +38,7 @@ type Store = {
   newTodo: string;
 };
 
-// event
+// events
 
 export const setNewTodo = createEvent<string>();
 export const addTodo = createEvent();
@@ -46,12 +46,23 @@ export const update = createEvent<{ id: number; text: string }>();
 export const remove = createEvent<number>();
 export const toggle = createEvent<number>();
 
+// effects
+
+export const getTodosFx = createEffect(async (url: string) => {
+  const res = await fetch(url);
+  return res.json();
+});
+
 // createStore
 
 export default createStore<Store>({
   todos: [],
   newTodo: "",
 })
+  .on(getTodosFx.doneData, (state, todos) => ({
+    ...state,
+    todos,
+  }))
   .on(setNewTodo, (state, newTodo) => ({
     ...state,
     newTodo,
