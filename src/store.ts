@@ -42,6 +42,9 @@ type Store = {
 
 export const setNewTodo = createEvent<string>();
 export const addTodo = createEvent();
+export const update = createEvent<{ id: number; text: string }>();
+export const remove = createEvent<number>();
+export const toggle = createEvent<number>();
 
 // createStore
 
@@ -57,4 +60,19 @@ export default createStore<Store>({
     ...state,
     newTodo: "",
     todos: addTodoToList(state.todos, state.newTodo),
+  }))
+  .on(update, (state, { id, text }) => ({
+    ...state,
+    newTodo: "",
+    todos: updateTodo(state.todos, id, text),
+  }))
+  .on(toggle, (state, id) => ({
+    ...state,
+    newTodo: "",
+    todos: toggleTodo(state.todos, id),
+  }))
+  .on(remove, (state, id) => ({
+    ...state,
+    newTodo: "",
+    todos: removeTodo(state.todos, id),
   }));
