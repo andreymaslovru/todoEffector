@@ -5,6 +5,7 @@ import {
   combine,
   restore,
 } from "effector";
+import { configure } from "effector-logger";
 
 // Standard interface and functions
 export interface Todo {
@@ -51,6 +52,8 @@ export const addTodo = createEvent();
 export const update = createEvent<{ id: number; text: string }>();
 export const remove = createEvent<number>();
 export const toggle = createEvent<number>();
+
+configure(addTodo, { log: "disabled" });
 
 // effects
 
